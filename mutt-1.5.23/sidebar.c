@@ -267,7 +267,7 @@ int draw_sidebar(int menu)
 
         for ( ; tmp && lines < LINES-1 - (menu != MENU_PAGER || option(OPTSTATUSONTOP)); tmp = tmp->next ) {
                 if ( tmp == CurBuffy )
-                        SETCOLOR(MT_COLOR_INDICATOR);
+                        SETCOLOR(MT_COLOR_SB_INDICATOR);
                 else if ( tmp->msg_unread > 0 )
                         SETCOLOR(MT_COLOR_NEW);
                 else if ( tmp->msg_flagged > 0 )

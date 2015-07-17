@@ -94,6 +94,7 @@ static const struct mapping_t Fields[] =
         { "index",            MT_COLOR_INDEX },
         { "sidebar_new",      MT_COLOR_NEW },
         { "sidebar_flagged",  MT_COLOR_FLAGGED },
+		{ "sidebar_indicator", MT_COLOR_SB_INDICATOR },
         { NULL,               0 }
 };
 
@@ -146,6 +147,7 @@ void ci_start_color (void)
 /* set some defaults */
         ColorDefs[MT_COLOR_STATUS] = A_REVERSE;
         ColorDefs[MT_COLOR_INDICATOR] = A_REVERSE;
+		ColorDefs[MT_COLOR_SB_INDICATOR] = A_REVERSE;
         ColorDefs[MT_COLOR_SEARCH] = A_REVERSE;
         ColorDefs[MT_COLOR_MARKERS] = A_REVERSE;
 /* special meaning: toggle the relevant attribute */

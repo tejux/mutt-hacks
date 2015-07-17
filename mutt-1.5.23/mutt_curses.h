@@ -123,6 +123,7 @@ enum
         MT_COLOR_INDEX,
         MT_COLOR_NEW,
         MT_COLOR_FLAGGED,
+		MT_COLOR_SB_INDICATOR,
         MT_COLOR_MAX
 };
 
