@@ -161,6 +161,49 @@ void mutt_buffy_cleanup (const char *buf, struct stat *st)
   }
 }
 
+static int buffy_compare_name(const void *a, const void *b) {
+  const BUFFY *b1 = * (BUFFY * const *) a;
+  const BUFFY *b2 = * (BUFFY * const *) b;
+
+  return mutt_strcoll(b1->path, b2->path);
+}
+
+static BUFFY *buffy_sort(BUFFY *b)
+{
+  BUFFY *tmp = b;
+  int buffycount = 0;
+  BUFFY **ary;
+  int i;
+
+  if (!option(OPTSIDEBARSORT))
+    return b;
+
+  for (; tmp != NULL; tmp = tmp->next)
+    buffycount++;
+
+  ary = (BUFFY **) safe_calloc(buffycount, sizeof (*ary));
+
+  tmp = b;
+  for (i = 0; tmp != NULL; tmp = tmp->next, i++) {
+    ary[i] = tmp;
+  }
+
+  qsort(ary, buffycount, sizeof(*ary), buffy_compare_name);
+
+  for (i = 0; i < buffycount - 1; i++) {
+    ary[i]->next = ary[i+1];
+  }
+  ary[buffycount - 1]->next = NULL;
+  for (i = 1; i < buffycount; i++) {
+    ary[i]->prev = ary[i-1];
+  }
+  ary[0]->prev = NULL;
+
+  tmp = ary[0];
+  free(ary);
+  return tmp;
+}
+
 BUFFY *mutt_find_mailbox (const char *path)
 {
   BUFFY *tmp = NULL;
@@ -282,6 +325,7 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
     else
       (*tmp)->size = 0;
   }
+  Incoming = buffy_sort(Incoming);
   return 0;
 }
 
@@ -340,6 +384,68 @@ static int buffy_maildir_hasnew (BUFFY* mailbox)
   return rc;
 }
 
+/* update message counts for the sidebar */
+void buffy_maildir_update (BUFFY* mailbox)
+{
+  char path[_POSIX_PATH_MAX];
+  DIR *dirp;
+  struct dirent *de;
+  char *p;
+
+  mailbox->msgcount = 0;
+  mailbox->msg_unread = 0;
+  mailbox->msg_flagged = 0;
+
+  snprintf (path, sizeof (path), "%s/new", mailbox->path);
+        
+  if ((dirp = opendir (path)) == NULL)
+  {   
+    mailbox->magic = 0;
+    return;
+  } 
+      
+  while ((de = readdir (dirp)) != NULL)
+  {
+    if (*de->d_name == '.')
+      continue;
+
+    if (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')) {
+      mailbox->new = 1;
+      mailbox->msgcount++;
+      mailbox->msg_unread++;
+    }
+  }
+
+  closedir (dirp);
+  snprintf (path, sizeof (path), "%s/cur", mailbox->path);
+        
+  if ((dirp = opendir (path)) == NULL)
+  {   
+    mailbox->magic = 0;
+    return;
+  } 
+      
+  while ((de = readdir (dirp)) != NULL)
+  {
+    if (*de->d_name == '.')
+      continue;
+
+    if (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')) {
+      mailbox->msgcount++;
+      if ((p = strstr (de->d_name, ":2,"))) {
+        if (!strchr (p + 3, 'T')) {
+          if (!strchr (p + 3, 'S'))
+            mailbox->msg_unread++;
+          if (strchr(p + 3, 'F'))
+            mailbox->msg_flagged++;
+        }
+      }
+    }
+  }
+
+  closedir (dirp);
+}
+
 /* returns 1 if mailbox has new mail */ 
 static int buffy_mbox_hasnew (BUFFY* mailbox, struct stat *sb)
 {
@@ -369,6 +475,20 @@ static int buffy_mbox_hasnew (BUFFY* mailbox, struct stat *sb)
     mailbox->newly_created = 0;
 
   return rc;
+}
+
+/* update message counts for the sidebar */
+void buffy_mbox_update (BUFFY* mailbox)
+{
+  CONTEXT *ctx = NULL;
+
+  ctx = mx_open_mailbox(mailbox->path, M_READONLY | M_QUIET | M_NOSORT | M_PEEK, NULL);
+  if(ctx)
+  {
+    mailbox->msgcount = ctx->msgcount;
+    mailbox->msg_unread = ctx->unread;
+    mx_close_mailbox(ctx, 0);
+  }
 }
 
 int mutt_buffy_check (int force)
@@ -444,16 +564,19 @@ int mutt_buffy_check (int force)
       {
       case M_MBOX:
       case M_MMDF:
+	buffy_mbox_update (tmp);
 	if (buffy_mbox_hasnew (tmp, &sb) > 0)
 	  BuffyCount++;
 	break;
 
       case M_MAILDIR:
+	buffy_maildir_update (tmp);
 	if (buffy_maildir_hasnew (tmp) > 0)
 	  BuffyCount++;
 	break;
 
       case M_MH:
+	mh_buffy_update (tmp->path, &tmp->msgcount, &tmp->msg_unread, &tmp->msg_flagged);
 	mh_buffy(tmp);
 	if (tmp->new)
 	  BuffyCount++;

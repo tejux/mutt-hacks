@@ -1966,6 +1966,27 @@ struct option_t MuttVars[] = {
   ** not used.
   ** (PGP only)
   */
+  {"sidebar_delim", DT_STR, R_BOTH, UL &SidebarDelim, "|"},
+  /*
+  ** .pp
+  ** This specifies the delimiter between the sidebar (if visible) and 
+  ** other screens.
+  */
+  { "sidebar_visible", DT_BOOL, R_BOTH, OPTSIDEBAR, 0 },
+  /*
+  ** .pp
+  ** This specifies whether or not to show sidebar (left-side list of folders).
+  */
+  { "sidebar_sort", DT_BOOL, R_BOTH, OPTSIDEBARSORT, 0 },
+  /*
+  ** .pp
+  ** This specifies whether or not to sort the sidebar alphabetically.
+  */
+  { "sidebar_width", DT_NUM, R_BOTH, UL &SidebarWidth, 0 },
+  /*
+  ** .pp
+  ** The width of the sidebar.
+  */
   { "pgp_use_gpg_agent", DT_BOOL, R_NONE, OPTUSEGPGAGENT, 0},
   /*
   ** .pp
