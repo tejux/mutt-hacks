@@ -2,6 +2,7 @@
 Hacked version of mutt. Following hacks are done.
 
 1)	Sidebar jump-to mailbox
+
 	sidebar is great, but people have too many mailboxes and going next-prev
 	is too slow. This hack adds a key-binding to jump to a configured set of 
 	mailboxes. e.g. configuration
