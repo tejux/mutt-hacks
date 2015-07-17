@@ -1006,6 +1006,9 @@ int mutt_index_menu (void)
                                         menu->redraw = REDRAW_FULL;
                                 break;
 
+						case OP_SIDEBAR_JUMP_MAILBOX1:
+						case OP_SIDEBAR_JUMP_MAILBOX2:
+						case OP_SIDEBAR_JUMP_MAILBOX3:
                         case OP_SIDEBAR_OPEN:
                         case OP_MAIN_CHANGE_FOLDER:
                         case OP_MAIN_NEXT_UNREAD_MAILBOX:
@@ -1039,8 +1042,17 @@ int mutt_index_menu (void)
                                                 if(!CurBuffy)
                                                         break;
                                                 strncpy( buf, CurBuffy->path, sizeof(buf) );
-                                        } else if (mutt_enter_fname (cp, buf, sizeof (buf), &menu->redraw, 1) == -1)
-                                        {
+										} else if(op == OP_SIDEBAR_JUMP_MAILBOX1 || 
+												  op == OP_SIDEBAR_JUMP_MAILBOX2 ||
+												  op == OP_SIDEBAR_JUMP_MAILBOX3) {
+											char *tbuf;
+
+											tbuf = sidebar_get_jump_mailbox_name(op, Maildir);
+											if(tbuf == NULL)
+												break;
+											strncpy(buf, tbuf, sizeof(buf));
+
+                                        } else if (mutt_enter_fname (cp, buf, sizeof (buf), &menu->redraw, 1) == -1) {
                                                 if (menu->menu == MENU_PAGER) {
                                                         op = OP_DISPLAY_MESSAGE;
                                                         continue;
@@ -1048,7 +1060,8 @@ int mutt_index_menu (void)
                                                 else
                                                         break;
                                         }
-                                        if (!buf[0]) {
+										
+										if (!buf[0]) {
                                                 CLEARLINE (LINES-1);
                                                 break;
                                         }

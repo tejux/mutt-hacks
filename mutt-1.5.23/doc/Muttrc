@@ -2799,6 +2799,29 @@ attachments   -I message/external-body
 # other screens.
 # 
 # 
+# set sidebar_jump_mailbox1="0],__None__"
+#
+# Name: sidebar_jump_mailbox1
+# Type: string
+# Default: "0],__None__"
+# 
+# set sidebar_jump_mailbox2="1],__None__"
+#
+# Name: sidebar_jump_mailbox2
+# Type: string
+# Default: "1],__None__"
+# 
+# set sidebar_jump_mailbox3="2],__None__"
+#
+# Name: sidebar_jump_mailbox3
+# Type: string
+# Default: "2],__None__"
+# 
+# 
+# This specifies the name of the mailboxes in the sidebar, you want direct shortcuts to.
+# 3 such mailboxes can be set.
+# 
+# 
 # set sidebar_visible=no
 #
 # Name: sidebar_visible

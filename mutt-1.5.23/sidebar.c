@@ -35,13 +35,45 @@ static BUFFY *TopBuffy = 0;
 static BUFFY *BottomBuffy = 0;
 static int known_lines = 0;
 
-static int quick_log10(int n)
-{
-        char string[32];
-        sprintf(string, "%d", n);
-        return strlen(string);
+#define SCRATCH_BUFSZ	(512)
+char sidebar_scratch[SCRATCH_BUFSZ];
+
+char *sidebar_get_jump_mailbox_name(int op, char *base_box) {
+	int box_ix;
+
+	switch(op) {
+	case OP_SIDEBAR_JUMP_MAILBOX1:	box_ix = 0; break; 
+	case OP_SIDEBAR_JUMP_MAILBOX2:	box_ix = 1; break; 
+	case OP_SIDEBAR_JUMP_MAILBOX3:	box_ix = 2; break; 
+	}
+	if((snprintf(sidebar_scratch, SCRATCH_BUFSZ, "%s%s", base_box, SidebarJMailbox[box_ix])) >= SCRATCH_BUFSZ)
+		return NULL;
+	return &sidebar_scratch[0];
 }
 
+static int quick_log10(int x) {
+    // this is either a fun exercise in optimization 
+    // or it's extremely premature optimization.
+	// !But better than what was used before! 
+    if(x>=100000) {
+        if(x>=10000000) {
+            if(x>=1000000000) return 10;
+            if(x>=100000000) return 9;
+            return 8;
+        }
+        if(x>=1000000) return 7;
+        return 6;
+    } else {
+        if(x>=1000) {
+            if(x>=10000) return 5;
+            return 4;
+        } else {
+            if(x>=100) return 3;
+            if(x>=10) return 2;
+            return 1;
+        }
+    }
+}
 
 void calc_boundaries (int menu)
 {

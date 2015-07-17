@@ -1972,6 +1972,15 @@ struct option_t MuttVars[] =
  ** This specifies the delimiter between the sidebar (if visible) and
  ** other screens.
  */
+		{"sidebar_jump_mailbox1", DT_STR, R_BOTH, UL &SidebarJMailbox[0], "__None__"},
+		{"sidebar_jump_mailbox2", DT_STR, R_BOTH, UL &SidebarJMailbox[1], "__None__"},
+		{"sidebar_jump_mailbox3", DT_STR, R_BOTH, UL &SidebarJMailbox[2], "__None__"},
+/*
+ ** .pp
+ ** This specifies the name of the mailboxes in the sidebar, you want direct shortcuts to.
+ ** 3 such mailboxes can be set.
+ */
+
         { "sidebar_visible", DT_BOOL, R_BOTH, OPTSIDEBAR, 0 },
 /*
  ** .pp

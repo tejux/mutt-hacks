@@ -174,6 +174,9 @@ const struct binding_t OpMain[] =                 /* map: index */
         { "sidebar-next",              OP_SIDEBAR_NEXT, NULL },
         { "sidebar-prev",              OP_SIDEBAR_PREV, NULL },
         { "sidebar-open",              OP_SIDEBAR_OPEN, NULL },
+		{ "sidebar-jump-key1",		   OP_SIDEBAR_JUMP_MAILBOX1, NULL },
+		{ "sidebar-jump-key2",         OP_SIDEBAR_JUMP_MAILBOX2, NULL },
+		{ "sidebar-jump-key3",         OP_SIDEBAR_JUMP_MAILBOX3, NULL },
         { NULL,                       0,                              NULL }
 };
 
@@ -284,6 +287,9 @@ const struct binding_t OpPager[] =                /* map: pager */
         { "sidebar-next",     OP_SIDEBAR_NEXT, NULL },
         { "sidebar-prev",     OP_SIDEBAR_PREV, NULL },
         { "sidebar-open", OP_SIDEBAR_OPEN, NULL },
+		{ "sidebar-jump-key1",		   OP_SIDEBAR_JUMP_MAILBOX1, NULL },
+		{ "sidebar-jump-key2",         OP_SIDEBAR_JUMP_MAILBOX2, NULL },
+		{ "sidebar-jump-key3",         OP_SIDEBAR_JUMP_MAILBOX3, NULL },
         { NULL,               0,                              NULL }
 };
 

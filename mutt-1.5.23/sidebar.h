@@ -33,4 +33,5 @@ int draw_sidebar(int);
 void scroll_sidebar(int, int);
 void set_curbuffy(char*);
 void set_buffystats(CONTEXT*);
+char *sidebar_get_jump_mailbox_name(int op, char *base_maildir);
 #endif                                            /* SIDEBAR_H */

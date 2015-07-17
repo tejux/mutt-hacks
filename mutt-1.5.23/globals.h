@@ -118,6 +118,8 @@ WHERE char *SendCharset;
 WHERE char *Sendmail;
 WHERE char *Shell;
 WHERE char *SidebarDelim;
+#define SIDEBAR_MAXJUMP_MAILBOXES	(3)
+WHERE char *SidebarJMailbox[SIDEBAR_MAXJUMP_MAILBOXES];
 WHERE char *Signature;
 WHERE char *SimpleSearch;
 #if USE_SMTP
