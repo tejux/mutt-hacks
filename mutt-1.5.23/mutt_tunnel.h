@@ -20,5 +20,4 @@
 #include "mutt_socket.h"
 
 int mutt_tunnel_socket_setup (CONNECTION *);
-
-#endif /* _MUTT_TUNNEL_H_ */
+#endif                                            /* _MUTT_TUNNEL_H_ */

@@ -1,7 +1,6 @@
 #ifndef _CRYPTHASH_H
 # define _CRYPTHASH_H
 
-
 # include <sys/types.h>
 # if HAVE_INTTYPES_H
 #  include <inttypes.h>
@@ -13,5 +12,4 @@
 
 /* POINTER defines a generic pointer type */
 typedef unsigned char *POINTER;
-
 #endif

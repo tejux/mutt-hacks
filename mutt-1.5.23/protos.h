@@ -1,21 +1,20 @@
 /*
  * Copyright (C) 1996-2000,2007 Michael R. Elkins <me@mutt.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
-
+ */
 
 #ifdef HAVE_INTTYPES_H
 # include <inttypes.h>
@@ -27,13 +26,13 @@
 
 #define mutt_make_string(A,B,C,D,E) _mutt_make_string(A,B,C,D,E,0)
 void _mutt_make_string (char *, size_t, const char *, CONTEXT *,
-	HEADER *, format_flag);
+HEADER *, format_flag);
 
 struct hdr_format_info
 {
-  CONTEXT *ctx;
-  HEADER *hdr;
-  const char *pager_progress;
+        CONTEXT *ctx;
+        HEADER *hdr;
+        const char *pager_progress;
 };
 
 void mutt_make_string_info (char *, size_t, const char *, struct hdr_format_info *, format_flag);
@@ -60,11 +59,10 @@ int _mutt_aside_thread (HEADER *, short, short);
 
 #define mutt_collapse_thread(x,y) _mutt_traverse_thread (x,y,M_THREAD_COLLAPSE)
 #define mutt_uncollapse_thread(x,y) _mutt_traverse_thread (x,y,M_THREAD_UNCOLLAPSE)
-#define mutt_get_hidden(x,y)_mutt_traverse_thread (x,y,M_THREAD_GET_HIDDEN) 
+#define mutt_get_hidden(x,y)_mutt_traverse_thread (x,y,M_THREAD_GET_HIDDEN)
 #define mutt_thread_contains_unread(x,y) _mutt_traverse_thread (x,y,M_THREAD_UNREAD)
 #define mutt_thread_next_unread(x,y) _mutt_traverse_thread(x,y,M_THREAD_NEXT_UNREAD)
 int _mutt_traverse_thread (CONTEXT *ctx, HEADER *hdr, int flag);
-
 
 #define mutt_new_parameter() safe_calloc (1, sizeof (PARAMETER))
 #define mutt_new_header() safe_calloc (1, sizeof (HEADER))
@@ -78,7 +76,6 @@ void mutt_parse_content_type (char *, BODY *);
 void mutt_generate_boundary (PARAMETER **);
 void mutt_delete_parameter (const char *attribute, PARAMETER **p);
 void mutt_set_parameter (const char *, const char *, PARAMETER **);
-
 
 FILE *mutt_open_read (const char *, pid_t *);
 
@@ -124,17 +121,16 @@ time_t mutt_parse_date (const char *, HEADER *);
 int is_from (const char *, char *, size_t, time_t *);
 
 const char *mutt_attach_fmt (
-	char *dest,
-	size_t destlen,
-	size_t col,
-	char op,
-	const char *src,
-	const char *prefix,
-	const char *ifstring,
-	const char *elsestring,
-	unsigned long data,
-	format_flag flags);
-
+char *dest,
+size_t destlen,
+size_t col,
+char op,
+const char *src,
+const char *prefix,
+const char *ifstring,
+const char *elsestring,
+unsigned long data,
+format_flag flags);
 
 char *mutt_charset_hook (const char *);
 char *mutt_iconv_hook (const char *);
@@ -336,12 +332,12 @@ int mutt_parse_unmono (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_push (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_rc_line (/* const */ char *, BUFFER *, BUFFER *);
 int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p,
-  short user_hdrs, short weed, short do_2047, LIST **lastp);
+short user_hdrs, short weed, short do_2047, LIST **lastp);
 int mutt_parse_score (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_unscore (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_parse_unhook (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 int mutt_pattern_func (int, char *);
-int mutt_pipe_attachment (FILE *, BODY *, const char *, char *); 
+int mutt_pipe_attachment (FILE *, BODY *, const char *, char *);
 int mutt_print_attachment (FILE *, BODY *);
 int mutt_query_complete (char *, size_t);
 int mutt_query_variables (LIST *queries);
@@ -351,7 +347,7 @@ int mutt_save_message (HEADER *, int, int, int, int *);
 int mutt_search_command (int, int);
 #ifdef USE_SMTP
 int mutt_smtp_send (const ADDRESS *, const ADDRESS *, const ADDRESS *,
-                    const ADDRESS *, const char *, int);
+const ADDRESS *, const char *, int);
 #endif
 int mutt_wstr_trunc (const char *, size_t, size_t, size_t *);
 int mutt_charlen (const char *s, int *);
@@ -389,14 +385,14 @@ int mutt_wctoutf8 (char *s, unsigned int c, size_t buflen);
 
 #ifdef LOCALES_HACK
 #define IsPrint(c) (isprint((unsigned char)(c)) || \
-	((unsigned char)(c) >= 0xa0))
+((unsigned char)(c) >= 0xa0))
 #define IsWPrint(wc) (iswprint(wc) || wc >= 0xa0)
 #else
 #define IsPrint(c) (isprint((unsigned char)(c)) || \
-	(option (OPTLOCALES) ? 0 : \
-	((unsigned char)(c) >= 0xa0)))
+(option (OPTLOCALES) ? 0 : \
+((unsigned char)(c) >= 0xa0)))
 #define IsWPrint(wc) (iswprint(wc) || \
-	(option (OPTLOCALES) ? 0 : (wc >= 0xa0)))
+(option (OPTLOCALES) ? 0 : (wc >= 0xa0)))
 #endif
 
 #define new_pattern() safe_calloc(1, sizeof (pattern_t))
@@ -427,7 +423,7 @@ void mutt_pattern_free (pattern_t **pat);
 #define LRAND rand
 #define SRAND srand
 #define DRAND (double)rand
-#endif /* HAVE_SRAND48 */
+#endif                                            /* HAVE_SRAND48 */
 
 /* HP-UX, ConvexOS and UNIXware don't have this macro */
 #ifndef S_ISLNK
@@ -461,7 +457,7 @@ extern char *sys_errlist[];
 #endif
 
 #define strerror(x) ((x) > 0 && (x) < sys_nerr) ? sys_errlist[(x)] : 0
-#endif /* !HAVE_STRERROR */
+#endif                                            /* !HAVE_STRERROR */
 
 #ifndef HAVE_MEMMOVE
 #define memmove(d,s,n) bcopy((s),(d),(n))
@@ -473,7 +469,7 @@ int strncasecmp (const char *, const char *, size_t);
 
 #ifdef _AIX
 int setegid (gid_t);
-#endif /* _AIX */
+#endif                                            /* _AIX */
 
 #ifndef STDC_HEADERS
 extern FILE *fdopen ();
@@ -522,7 +518,6 @@ extern int readlink ();
    in the declaration.  So declare all the args to avoid compiler errors.  This
    should be harmless on other systems.  */
 int ioctl (int, int, ...);
-
 #endif
 
 /* unsorted */

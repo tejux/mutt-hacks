@@ -19,10 +19,11 @@ char *strcasestr(const char *s1, const char *s2)
                 }
                 if ((*p == *s)
                         || (tolower(*((unsigned char *)p)) == tolower(*((unsigned char *)s)))
-                        ) {
+                ) {
                         ++p;
                         ++s;
-                } else {
+                }
+                else {
                         p = s2;
                         if (!*s) {
                                 return NULL;
@@ -34,10 +35,11 @@ char *strcasestr(const char *s1, const char *s2)
         while (*p && *s) {
                 if ((*p == *s)
                         || (tolower(*((unsigned char *)p)) == tolower(*((unsigned char *)s)))
-                        ) {
+                ) {
                         ++p;
                         ++s;
-                } else {
+                }
+                else {
                         p = s2;
                         s = ++s1;
                 }

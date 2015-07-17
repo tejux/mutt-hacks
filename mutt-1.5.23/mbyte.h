@@ -42,12 +42,10 @@ int iswupper (wint_t wc);
 wint_t towupper (wint_t wc);
 wint_t towlower (wint_t wc);
 int wcwidth (wchar_t wc);
-# endif /* !HAVE_WC_FUNCS */
-
+# endif                                           /* !HAVE_WC_FUNCS */
 
 void mutt_set_charset (char *charset);
 extern int Charset_is_utf8;
 size_t utf8rtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *_ps);
 wchar_t replacement_char (void);
-
-#endif /* _MBYTE_H */
+#endif                                            /* _MBYTE_H */

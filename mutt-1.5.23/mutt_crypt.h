@@ -1,21 +1,21 @@
 /*
  * Copyright (C) 2003 Werner Koch <wk@gnupg.org>
  * Copyright (C) 2004 g10code GmbH
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 /*
    Common definitions and prototypes for the crypt functions. They are
@@ -25,11 +25,9 @@
 #ifndef MUTT_CRYPT_H
 #define MUTT_CRYPT_H
 
-#include "mutt.h"        /* Need this to declare BODY, ADDRESS. STATE etc. */
+#include "mutt.h"                                 /* Need this to declare BODY, ADDRESS. STATE etc. */
 /* FIXME: They should be pointer to anonymous structures for better
    information hiding. */
-
-
 
 #define ENCRYPT    (1 << 0)
 #define SIGN       (1 << 1)
@@ -37,10 +35,10 @@
 #define BADSIGN    (1 << 3)
 #define PARTSIGN   (1 << 4)
 #define SIGNOPAQUE (1 << 5)
-#define KEYBLOCK   (1 << 6) /* KEY too generic? */
+#define KEYBLOCK   (1 << 6)                       /* KEY too generic? */
 #define INLINE     (1 << 7)
 
-#define APPLICATION_PGP    (1 << 8) 
+#define APPLICATION_PGP    (1 << 8)
 #define APPLICATION_SMIME  (1 << 9)
 
 #define PGP_TRADITIONAL_CHECKED (1 << 10)
@@ -48,7 +46,7 @@
 #define PGPENCRYPT  (APPLICATION_PGP | ENCRYPT)
 #define PGPSIGN     (APPLICATION_PGP | SIGN)
 #define PGPGOODSIGN (APPLICATION_PGP | GOODSIGN)
-#define PGPKEY      (APPLICATION_PGP | KEYBLOCK) 
+#define PGPKEY      (APPLICATION_PGP | KEYBLOCK)
 #define PGPINLINE   (APPLICATION_PGP | INLINE)
 
 #define SMIMEENCRYPT  (APPLICATION_SMIME | ENCRYPT)
@@ -56,7 +54,6 @@
 #define SMIMEGOODSIGN (APPLICATION_SMIME | GOODSIGN)
 #define SMIMEBADSIGN  (APPLICATION_SMIME | BADSIGN)
 #define SMIMEOPAQUE   (APPLICATION_SMIME | SIGNOPAQUE)
-
 
 /* WITHCRYPTO actually replaces ifdefs so make the code more readable.
    Because it is defined as a constant and known at compile time, the
@@ -74,18 +71,17 @@
 # define WithCrypto 0
 #endif
 
-
-#define KEYFLAG_CANSIGN 		(1 <<  0)
-#define KEYFLAG_CANENCRYPT 		(1 <<  1)
+#define KEYFLAG_CANSIGN                 (1 <<  0)
+#define KEYFLAG_CANENCRYPT              (1 <<  1)
 #define KEYFLAG_ISX509                  (1 <<  2)
-#define KEYFLAG_SECRET			(1 <<  7)
-#define KEYFLAG_EXPIRED 		(1 <<  8)
-#define KEYFLAG_REVOKED 		(1 <<  9)
-#define KEYFLAG_DISABLED 		(1 << 10)
-#define KEYFLAG_SUBKEY 			(1 << 11)
-#define KEYFLAG_CRITICAL 		(1 << 12)
-#define KEYFLAG_PREFER_ENCRYPTION 	(1 << 13)
-#define KEYFLAG_PREFER_SIGNING 		(1 << 14)
+#define KEYFLAG_SECRET                  (1 <<  7)
+#define KEYFLAG_EXPIRED                 (1 <<  8)
+#define KEYFLAG_REVOKED                 (1 <<  9)
+#define KEYFLAG_DISABLED                (1 << 10)
+#define KEYFLAG_SUBKEY                  (1 << 11)
+#define KEYFLAG_CRITICAL                (1 << 12)
+#define KEYFLAG_PREFER_ENCRYPTION       (1 << 13)
+#define KEYFLAG_PREFER_SIGNING          (1 << 14)
 
 #define KEYFLAG_CANTUSE (KEYFLAG_DISABLED|KEYFLAG_REVOKED|KEYFLAG_EXPIRED)
 #define KEYFLAG_RESTRICTIONS (KEYFLAG_CANTUSE|KEYFLAG_CRITICAL)
@@ -94,16 +90,13 @@
 
 enum pgp_ring
 {
-  PGP_PUBRING,
-  PGP_SECRING
+        PGP_PUBRING,
+        PGP_SECRING
 };
 typedef enum pgp_ring pgp_ring_t;
 
-
 struct pgp_keyinfo;
 typedef struct pgp_keyinfo *pgp_key_t;
-
-
 
 /* Some prototypes -- old crypt.h. */
 
@@ -121,14 +114,11 @@ int mutt_signed_handler (BODY *, STATE *);
 
 int mutt_parse_crypt_hdr (const char *, int, int);
 
-
 void convert_to_7bit (BODY *);
 
+/*-- crypt.c --*/
 
-
-/*-- crypt.c --*/ 
-
-/* Print the current time. */ 
+/* Print the current time. */
 void crypt_current_time(STATE *s, char *app_name);
 
 /* Check out the type of encryption used and set the cached status
@@ -139,7 +129,7 @@ int crypt_query (BODY *m);
 void crypt_extract_keys_from_messages (HEADER *h);
 
 /* Do a quick check to make sure that we can find all of the
-   encryption keys if the user has requested this service. 
+   encryption keys if the user has requested this service.
    Return the list of keys in KEYLIST. */
 int crypt_get_keys (HEADER *msg, char **keylist);
 
@@ -153,19 +143,15 @@ int crypt_valid_passphrase (int);
    TEMPFILE.  */
 int crypt_write_signed(BODY *a, STATE *s, const char *tempf);
 
-
-
 /*-- cryptglue.c --*/
 
 /* Show a message that a backend will be invoked. */
 void crypt_invoke_message (int type);
 
-
 /* Silently forget about a passphrase. */
 void crypt_pgp_void_passphrase (void);
 
 int crypt_pgp_valid_passphrase (void);
-
 
 /* Decrypt a PGP/MIME message. */
 int crypt_pgp_decrypt_mime (FILE *a, FILE **b, BODY *c, BODY **d);
@@ -181,7 +167,7 @@ void crypt_pgp_invoke_getkeys (ADDRESS *addr);
 
 /* Ask for a PGP key. */
 pgp_key_t crypt_pgp_ask_for_key (char *tag, char *whatfor,
-                                 short abilities, pgp_ring_t keyring);
+short abilities, pgp_ring_t keyring);
 
 /* Check for a traditional PGP message in body B. */
 int crypt_pgp_check_traditional (FILE *fp, BODY *b, int tagged_only);
@@ -221,8 +207,6 @@ char *crypt_pgp_keyid (pgp_key_t k);
 void crypt_pgp_extract_keys_from_attachment_list (FILE *fp, int tag,BODY *top);
 
 void crypt_pgp_set_sender (const char *sender);
-
-
 
 /* Silently forget about a passphrase. */
 void crypt_smime_void_passphrase (void);
@@ -265,5 +249,4 @@ void crypt_smime_set_sender (const char *sender);
 int crypt_smime_verify_one (BODY *sigbdy, STATE *s, const char *tempf);
 
 void crypt_init (void);
-
-#endif /*MUTT_CRYPT_H*/
+#endif                                            /*MUTT_CRYPT_H*/

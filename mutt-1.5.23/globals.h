@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 1996-2002, 2010 Michael R. Elkins <me@mutt.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 WHERE void (*mutt_error) (const char *, ...);
 WHERE void (*mutt_message) (const char *, ...);
@@ -76,8 +76,8 @@ WHERE char *MessageCachedir;
 WHERE char *HeaderCache;
 #if HAVE_GDBM || HAVE_DB4
 WHERE char *HeaderCachePageSize;
-#endif /* HAVE_GDBM || HAVE_DB4 */
-#endif /* USE_HCACHE */
+#endif                                            /* HAVE_GDBM || HAVE_DB4 */
+#endif                                            /* USE_HCACHE */
 WHERE char *MhFlagged;
 WHERE char *MhReplied;
 WHERE char *MhUnseen;
@@ -87,7 +87,7 @@ WHERE char *MsgFmt;
 WHERE char *Preconnect INITVAL (NULL);
 WHERE char *Tunnel INITVAL (NULL);
 WHERE short NetInc;
-#endif /* USE_SOCKET */
+#endif                                            /* USE_SOCKET */
 
 #ifdef MIXMASTER
 WHERE char *Mixmaster;
@@ -124,7 +124,7 @@ WHERE char *SimpleSearch;
 WHERE char *SmtpAuthenticators INITVAL (NULL);
 WHERE char *SmtpPass INITVAL (NULL);
 WHERE char *SmtpUrl INITVAL (NULL);
-#endif /* USE_SMTP */
+#endif                                            /* USE_SMTP */
 WHERE char *Spoolfile;
 WHERE char *SpamSep;
 #if defined(USE_SSL)
@@ -145,7 +145,6 @@ WHERE char *Visual;
 
 WHERE char *CurrentFolder;
 WHERE char *LastFolder;
-
 
 WHERE const char *ReleaseDate;
 
@@ -171,7 +170,6 @@ WHERE RX_LIST *SubscribedLists INITVAL(0);
 WHERE RX_LIST *UnSubscribedLists INITVAL(0);
 WHERE SPAM_LIST *SpamList INITVAL(0);
 WHERE RX_LIST *NoSpamList INITVAL(0);
-
 
 /* bit vector for boolean variables */
 #ifdef MAIN_C
@@ -266,9 +264,6 @@ WHERE char *SmimeGetCertCommand;
 WHERE char *SmimeImportCertCommand;
 WHERE char *SmimeGetCertEmailCommand;
 
-
-
-
 #ifdef MAIN_C
 const char * const Weekdays[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 const char * const Months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "ERR" };
@@ -281,11 +276,11 @@ extern const char * const Months[];
 #endif
 
 #ifdef MAIN_C
-/* so that global vars get included */ 
+/* so that global vars get included */
 #include "mx.h"
 #include "mutt_regex.h"
 #include "buffy.h"
 #include "sort.h"
 #include "mutt_crypt.h"
 #include "reldate.h"
-#endif /* MAIN_C */
+#endif                                            /* MAIN_C */

@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 1996-2000,2 Michael R. Elkins <me@mutt.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 #ifndef KEYMAP_H
 #define KEYMAP_H
@@ -36,13 +36,13 @@ void init_extended_keys(void);
 /* entry in the keymap tree */
 struct keymap_t
 {
-  char *macro;           /* macro expansion (op == OP_MACRO) */
-  char *descr;           /* description of a macro for the help menu */
-  struct keymap_t *next; /* next key in map */
-  short op;              /* operation to perform */
-  short eq;              /* number of leading keys equal to next entry */
-  short len;             /* length of key sequence (unit: sizeof (keycode_t)) */
-  keycode_t *keys;       /* key sequence */
+        char *macro;                              /* macro expansion (op == OP_MACRO) */
+        char *descr;                              /* description of a macro for the help menu */
+        struct keymap_t *next;                    /* next key in map */
+        short op;                                 /* operation to perform */
+        short eq;                                 /* number of leading keys equal to next entry */
+        short len;                                /* length of key sequence (unit: sizeof (keycode_t)) */
+        keycode_t *keys;                          /* key sequence */
 };
 
 int km_expand_key (char *, size_t, struct keymap_t *);
@@ -53,33 +53,30 @@ void mutt_what_key (void);
 
 enum
 {
-  MENU_ALIAS,
-  MENU_ATTACH,
-  MENU_COMPOSE,
-  MENU_EDITOR,
-  MENU_FOLDER,
-  MENU_GENERIC,
-  MENU_MAIN,
-  MENU_PAGER,
-  MENU_POST,
-  MENU_QUERY,
+        MENU_ALIAS,
+        MENU_ATTACH,
+        MENU_COMPOSE,
+        MENU_EDITOR,
+        MENU_FOLDER,
+        MENU_GENERIC,
+        MENU_MAIN,
+        MENU_PAGER,
+        MENU_POST,
+        MENU_QUERY,
 
-  
-  MENU_PGP,
-  MENU_SMIME,
+        MENU_PGP,
+        MENU_SMIME,
 
 #ifdef CRYPT_BACKEND_GPGME
-  MENU_KEY_SELECT_PGP,
-  MENU_KEY_SELECT_SMIME,
+        MENU_KEY_SELECT_PGP,
+        MENU_KEY_SELECT_SMIME,
 #endif
-  
+
 #ifdef MIXMASTER
-  MENU_MIX,
+        MENU_MIX,
 #endif
 
-
-
-  MENU_MAX
+        MENU_MAX
 };
 
 /* the keymap trees (one for each menu) */
@@ -92,9 +89,9 @@ extern const struct mapping_t Menus[];
 
 struct binding_t
 {
-  char *name;	/* name of the function */
-  int op;	/* function id number */
-  char *seq;	/* default key binding */
+        char *name;                               /* name of the function */
+        int op;                                   /* function id number */
+        char *seq;                                /* default key binding */
 };
 
 const struct binding_t *km_get_table (int menu);
@@ -119,5 +116,4 @@ extern const struct binding_t OpMix[];
 #endif
 
 #include "keymap_defs.h"
-
-#endif /* KEYMAP_H */
+#endif                                            /* KEYMAP_H */

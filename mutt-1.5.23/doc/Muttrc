@@ -657,26 +657,6 @@ attachments   -I message/external-body
 # $crypt_autosign, $crypt_replysign and $smime_is_default.
 # 
 # 
-# set sidebar_visible=no
-#
-# Name: sidebar_visible
-# Type: boolean
-# Default: no
-# 
-# 
-# This specifies whether or not to show sidebar (left-side list of folders).
-# 
-# 
-# set sidebar_width=0
-#
-# Name: sidebar_width
-# Type: number
-# Default: 0
-# 
-# 
-# The width of the sidebar.
-# 
-# 
 # set crypt_autosign=no
 #
 # Name: crypt_autosign
@@ -2806,6 +2786,47 @@ attachments   -I message/external-body
 # The number of seconds after which a cached passphrase will expire if
 # not used.
 # (PGP only)
+# 
+# 
+# set sidebar_delim="|"
+#
+# Name: sidebar_delim
+# Type: string
+# Default: "|"
+# 
+# 
+# This specifies the delimiter between the sidebar (if visible) and
+# other screens.
+# 
+# 
+# set sidebar_visible=no
+#
+# Name: sidebar_visible
+# Type: boolean
+# Default: no
+# 
+# 
+# This specifies whether or not to show sidebar (left-side list of folders).
+# 
+# 
+# set sidebar_sort=no
+#
+# Name: sidebar_sort
+# Type: boolean
+# Default: no
+# 
+# 
+# This specifies whether or not to sort the sidebar alphabetically.
+# 
+# 
+# set sidebar_width=0
+#
+# Name: sidebar_width
+# Type: number
+# Default: 0
+# 
+# 
+# The width of the sidebar.
 # 
 # 
 # set pgp_use_gpg_agent=no

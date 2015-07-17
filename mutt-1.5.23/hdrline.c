@@ -1,20 +1,20 @@
 /*
  * Copyright (C) 1996-2000,2002,2007 Michael R. Elkins <me@mutt.org>
- * 
+ *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -38,18 +38,20 @@
 
 int mutt_is_mail_list (ADDRESS *addr)
 {
-  if (!mutt_match_rx_list (addr->mailbox, UnMailLists))
-    return mutt_match_rx_list (addr->mailbox, MailLists);
-  return 0;
+        if (!mutt_match_rx_list (addr->mailbox, UnMailLists))
+                return mutt_match_rx_list (addr->mailbox, MailLists);
+        return 0;
 }
+
 
 int mutt_is_subscribed_list (ADDRESS *addr)
 {
-  if (!mutt_match_rx_list (addr->mailbox, UnMailLists)
-      && !mutt_match_rx_list (addr->mailbox, UnSubscribedLists))
-    return mutt_match_rx_list (addr->mailbox, SubscribedLists);
-  return 0;
+        if (!mutt_match_rx_list (addr->mailbox, UnMailLists)
+                && !mutt_match_rx_list (addr->mailbox, UnSubscribedLists))
+                return mutt_match_rx_list (addr->mailbox, SubscribedLists);
+        return 0;
 }
+
 
 /* Search for a mailing list in the list of addresses pointed to by adr.
  * If one is found, print pfx and the name of the list into buf, then
@@ -58,17 +60,16 @@ int mutt_is_subscribed_list (ADDRESS *addr)
 static int
 check_for_mailing_list (ADDRESS *adr, char *pfx, char *buf, int buflen)
 {
-  for (; adr; adr = adr->next)
-  {
-    if (mutt_is_subscribed_list (adr))
-    {
-      if (pfx && buf && buflen)
-	snprintf (buf, buflen, "%s%s", pfx, mutt_get_name (adr));
-      return 1;
-    }
-  }
-  return 0;
+        for (; adr; adr = adr->next) {
+                if (mutt_is_subscribed_list (adr)) {
+                        if (pfx && buf && buflen)
+                                snprintf (buf, buflen, "%s%s", pfx, mutt_get_name (adr));
+                        return 1;
+                }
+        }
+        return 0;
 }
+
 
 /* Search for a mailing list in the list of addresses pointed to by adr.
  * If one is found, print the address of the list into buf, then return 1.
@@ -77,89 +78,87 @@ check_for_mailing_list (ADDRESS *adr, char *pfx, char *buf, int buflen)
 static int
 check_for_mailing_list_addr (ADDRESS *adr, char *buf, int buflen)
 {
-  for (; adr; adr = adr->next)
-  {
-    if (mutt_is_subscribed_list (adr))
-    {
-      if (buf && buflen)
-	snprintf (buf, buflen, "%s", adr->mailbox);
-      return 1;
-    }
-  }
-  return 0;
+        for (; adr; adr = adr->next) {
+                if (mutt_is_subscribed_list (adr)) {
+                        if (buf && buflen)
+                                snprintf (buf, buflen, "%s", adr->mailbox);
+                        return 1;
+                }
+        }
+        return 0;
 }
 
 
 static int first_mailing_list (char *buf, size_t buflen, ADDRESS *a)
 {
-  for (; a; a = a->next)
-  {
-    if (mutt_is_subscribed_list (a))
-    {
-      mutt_save_path (buf, buflen, a);
-      return 1;
-    }
-  }
-  return 0;
+        for (; a; a = a->next) {
+                if (mutt_is_subscribed_list (a)) {
+                        mutt_save_path (buf, buflen, a);
+                        return 1;
+                }
+        }
+        return 0;
 }
+
 
 static void make_from (ENVELOPE *hdr, char *buf, size_t len, int do_lists)
 {
-  int me;
+        int me;
 
-  me = mutt_addr_is_user (hdr->from);
+        me = mutt_addr_is_user (hdr->from);
 
-  if (do_lists || me)
-  {
-    if (check_for_mailing_list (hdr->to, "To ", buf, len))
-      return;
-    if (check_for_mailing_list (hdr->cc, "Cc ", buf, len))
-      return;
-  }
+        if (do_lists || me) {
+                if (check_for_mailing_list (hdr->to, "To ", buf, len))
+                        return;
+                if (check_for_mailing_list (hdr->cc, "Cc ", buf, len))
+                        return;
+        }
 
-  if (me && hdr->to)
-    snprintf (buf, len, "To %s", mutt_get_name (hdr->to));
-  else if (me && hdr->cc)
-    snprintf (buf, len, "Cc %s", mutt_get_name (hdr->cc));
-  else if (me && hdr->bcc)
-    snprintf (buf, len, "Bcc %s", mutt_get_name (hdr->bcc));
-  else if (hdr->from)
-    strfcpy (buf, mutt_get_name (hdr->from), len);
-  else
-    *buf = 0;
+        if (me && hdr->to)
+                snprintf (buf, len, "To %s", mutt_get_name (hdr->to));
+        else if (me && hdr->cc)
+                snprintf (buf, len, "Cc %s", mutt_get_name (hdr->cc));
+        else if (me && hdr->bcc)
+                snprintf (buf, len, "Bcc %s", mutt_get_name (hdr->bcc));
+        else if (hdr->from)
+                strfcpy (buf, mutt_get_name (hdr->from), len);
+        else
+                *buf = 0;
 }
+
 
 static void make_from_addr (ENVELOPE *hdr, char *buf, size_t len, int do_lists)
 {
-  int me;
+        int me;
 
-  me = mutt_addr_is_user (hdr->from);
+        me = mutt_addr_is_user (hdr->from);
 
-  if (do_lists || me)
-  {
-    if (check_for_mailing_list_addr (hdr->to, buf, len))
-      return;
-    if (check_for_mailing_list_addr (hdr->cc, buf, len))
-      return;
-  }
+        if (do_lists || me) {
+                if (check_for_mailing_list_addr (hdr->to, buf, len))
+                        return;
+                if (check_for_mailing_list_addr (hdr->cc, buf, len))
+                        return;
+        }
 
-  if (me && hdr->to)
-    snprintf (buf, len, "%s", hdr->to->mailbox);
-  else if (me && hdr->cc)
-    snprintf (buf, len, "%s", hdr->cc->mailbox);
-  else if (hdr->from)
-    strfcpy (buf, hdr->from->mailbox, len);
-  else
-    *buf = 0;
+        if (me && hdr->to)
+                snprintf (buf, len, "%s", hdr->to->mailbox);
+        else if (me && hdr->cc)
+                snprintf (buf, len, "%s", hdr->cc->mailbox);
+        else if (hdr->from)
+                strfcpy (buf, hdr->from->mailbox, len);
+        else
+                *buf = 0;
 }
+
 
 static int user_in_addr (ADDRESS *a)
 {
-  for (; a; a = a->next)
-    if (mutt_addr_is_user (a))
-      return 1;
-  return 0;
+        for (; a; a = a->next)
+                if (mutt_addr_is_user (a))
+                        return 1;
+        return 0;
 }
+
 
 /* Return values:
  * 0: user is not in list
@@ -171,33 +170,32 @@ static int user_in_addr (ADDRESS *a)
  */
 int mutt_user_is_recipient (HEADER *h)
 {
-  ENVELOPE *env = h->env;
+        ENVELOPE *env = h->env;
 
-  if(!h->recip_valid)
-  {
-    h->recip_valid = 1;
-    
-    if (mutt_addr_is_user (env->from))
-      h->recipient = 4;
-    else if (user_in_addr (env->to))
-    {
-      if (env->to->next || env->cc)
-	h->recipient = 2; /* non-unique recipient */
-      else
-	h->recipient = 1; /* unique recipient */
-    }
-    else if (user_in_addr (env->cc))
-      h->recipient = 3;
-    else if (check_for_mailing_list (env->to, NULL, NULL, 0))
-      h->recipient = 5;
-    else if (check_for_mailing_list (env->cc, NULL, NULL, 0))
-      h->recipient = 5;
-    else
-      h->recipient = 0;
-  }
-  
-  return h->recipient;
+        if(!h->recip_valid) {
+                h->recip_valid = 1;
+
+                if (mutt_addr_is_user (env->from))
+                        h->recipient = 4;
+                else if (user_in_addr (env->to)) {
+                        if (env->to->next || env->cc)
+                                h->recipient = 2; /* non-unique recipient */
+                        else
+                                h->recipient = 1; /* unique recipient */
+                }
+                else if (user_in_addr (env->cc))
+                        h->recipient = 3;
+                else if (check_for_mailing_list (env->to, NULL, NULL, 0))
+                        h->recipient = 5;
+                else if (check_for_mailing_list (env->cc, NULL, NULL, 0))
+                        h->recipient = 5;
+                else
+                        h->recipient = 0;
+        }
+
+        return h->recipient;
 }
+
 
 /* %a = address of author
  * %A = reply-to address (if present; otherwise: address of author
@@ -232,514 +230,486 @@ int mutt_user_is_recipient (HEADER *h)
 
 static const char *
 hdr_format_str (char *dest,
-		size_t destlen,
-		size_t col,
-		char op,
-		const char *src,
-		const char *prefix,
-		const char *ifstring,
-		const char *elsestring,
-		unsigned long data,
-		format_flag flags)
+size_t destlen,
+size_t col,
+char op,
+const char *src,
+const char *prefix,
+const char *ifstring,
+const char *elsestring,
+unsigned long data,
+format_flag flags)
 {
-  struct hdr_format_info *hfi = (struct hdr_format_info *) data;
-  HEADER *hdr, *htmp;
-  CONTEXT *ctx;
-  char fmt[SHORT_STRING], buf2[LONG_STRING], ch, *p;
-  int do_locales, i;
-  int optional = (flags & M_FORMAT_OPTIONAL);
-  int threads = ((Sort & SORT_MASK) == SORT_THREADS);
-  int is_index = (flags & M_FORMAT_INDEX);
+        struct hdr_format_info *hfi = (struct hdr_format_info *) data;
+        HEADER *hdr, *htmp;
+        CONTEXT *ctx;
+        char fmt[SHORT_STRING], buf2[LONG_STRING], ch, *p;
+        int do_locales, i;
+        int optional = (flags & M_FORMAT_OPTIONAL);
+        int threads = ((Sort & SORT_MASK) == SORT_THREADS);
+        int is_index = (flags & M_FORMAT_INDEX);
 #define THREAD_NEW (threads && hdr->collapsed && hdr->num_hidden > 1 && mutt_thread_contains_unread (ctx, hdr) == 1)
 #define THREAD_OLD (threads && hdr->collapsed && hdr->num_hidden > 1 && mutt_thread_contains_unread (ctx, hdr) == 2)
-  size_t len;
+        size_t len;
 
-  hdr = hfi->hdr;
-  ctx = hfi->ctx;
+        hdr = hfi->hdr;
+        ctx = hfi->ctx;
 
-  dest[0] = 0;
-  switch (op)
-  {
-    case 'A':
-      if(hdr->env->reply_to && hdr->env->reply_to->mailbox)
-      {
-	mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->reply_to));
-	break;
-      }
-      /* fall through if 'A' returns nothing */
+        dest[0] = 0;
+        switch (op) {
+                case 'A':
+                        if(hdr->env->reply_to && hdr->env->reply_to->mailbox) {
+                                mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->reply_to));
+                                break;
+                        }
+/* fall through if 'A' returns nothing */
 
-    case 'a':
-      if(hdr->env->from && hdr->env->from->mailbox)
-      {
-	mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->from));
-      }
-      else
-        dest[0] = '\0';
-      break;
+                case 'a':
+                        if(hdr->env->from && hdr->env->from->mailbox) {
+                                mutt_format_s (dest, destlen, prefix, mutt_addr_for_display (hdr->env->from));
+                        }
+                        else
+                                dest[0] = '\0';
+                        break;
 
-    case 'B':
-      if (!first_mailing_list (dest, destlen, hdr->env->to) &&
-	  !first_mailing_list (dest, destlen, hdr->env->cc))
-	dest[0] = 0;
-      if (dest[0])
-      {
-	strfcpy (buf2, dest, sizeof(buf2));
-	mutt_format_s (dest, destlen, prefix, buf2);
-	break;
-      }
-      /* fall through if 'B' returns nothing */
+                case 'B':
+                        if (!first_mailing_list (dest, destlen, hdr->env->to) &&
+                                !first_mailing_list (dest, destlen, hdr->env->cc))
+                                dest[0] = 0;
+                        if (dest[0]) {
+                                strfcpy (buf2, dest, sizeof(buf2));
+                                mutt_format_s (dest, destlen, prefix, buf2);
+                                break;
+                        }
+/* fall through if 'B' returns nothing */
 
-    case 'b':
-      if(ctx)
-      {
-	if ((p = strrchr (ctx->path, '/')))
-	  strfcpy (dest, p + 1, destlen);
-	else
-	  strfcpy (dest, ctx->path, destlen);
-      }
-      else 
-	strfcpy(dest, "(null)", destlen);
-      strfcpy (buf2, dest, sizeof(buf2));
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
-    
-    case 'c':
-      mutt_pretty_size (buf2, sizeof (buf2), (long) hdr->content->length);
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
+                case 'b':
+                        if(ctx) {
+                                if ((p = strrchr (ctx->path, '/')))
+                                        strfcpy (dest, p + 1, destlen);
+                                else
+                                        strfcpy (dest, ctx->path, destlen);
+                        }
+                        else
+                                strfcpy(dest, "(null)", destlen);
+                        strfcpy (buf2, dest, sizeof(buf2));
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-    case 'C':
-      snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-      snprintf (dest, destlen, fmt, hdr->msgno + 1);
-      break;
+                case 'c':
+                        mutt_pretty_size (buf2, sizeof (buf2), (long) hdr->content->length);
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-    case 'd':
-    case 'D':
-    case '{':
-    case '[':
-    case '(':
-    case '<':
+                case 'C':
+                        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                        snprintf (dest, destlen, fmt, hdr->msgno + 1);
+                        break;
 
-      /* preprocess $date_format to handle %Z */
-      {
-	const char *cp;
-	struct tm *tm; 
-	time_t T;
+                case 'd':
+                case 'D':
+                case '{':
+                case '[':
+                case '(':
+                case '<':
 
-	p = dest;
+/* preprocess $date_format to handle %Z */
+                        {
+                                const char *cp;
+                                struct tm *tm;
+                                time_t T;
 
-	cp = (op == 'd' || op == 'D') ? (NONULL (DateFmt)) : src;
-	if (*cp == '!')
-	{
-	  do_locales = 0;
-	  cp++;
-	}
-	else
-	  do_locales = 1;
+                                p = dest;
 
-	len = destlen - 1;
-	while (len > 0 && (((op == 'd' || op == 'D') && *cp) ||
-			   (op == '{' && *cp != '}') || 
-			   (op == '[' && *cp != ']') ||
-			   (op == '(' && *cp != ')') ||
-			   (op == '<' && *cp != '>')))
-	{
-	  if (*cp == '%')
-	  {
-	    cp++;
-	    if ((*cp == 'Z' || *cp == 'z') && (op == 'd' || op == '{'))
-	    {
-	      if (len >= 5)
-	      {
-		sprintf (p, "%c%02u%02u", hdr->zoccident ? '-' : '+',
-			 hdr->zhours, hdr->zminutes);
-		p += 5;
-		len -= 5;
-	      }
-	      else
-		break; /* not enough space left */
-	    }
-	    else
-	    {
-	      if (len >= 2)
-	      {
-		*p++ = '%';
-		*p++ = *cp;
-		len -= 2;
-	      }
-	      else
-		break; /* not enough space */
-	    }
-	    cp++;
-	  }
-	  else
-	  {
-	    *p++ = *cp++;
-	    len--;
-	  }
-	}
-	*p = 0;
+                                cp = (op == 'd' || op == 'D') ? (NONULL (DateFmt)) : src;
+                                if (*cp == '!') {
+                                        do_locales = 0;
+                                        cp++;
+                                }
+                                else
+                                        do_locales = 1;
 
-	if (do_locales && Locale)
-	  setlocale (LC_TIME, Locale);
+                                len = destlen - 1;
+                                while (len > 0 && (((op == 'd' || op == 'D') && *cp) ||
+                                        (op == '{' && *cp != '}') ||
+                                        (op == '[' && *cp != ']') ||
+                                        (op == '(' && *cp != ')') ||
+                                (op == '<' && *cp != '>'))) {
+                                        if (*cp == '%') {
+                                                cp++;
+                                                if ((*cp == 'Z' || *cp == 'z') && (op == 'd' || op == '{')) {
+                                                        if (len >= 5) {
+                                                                sprintf (p, "%c%02u%02u", hdr->zoccident ? '-' : '+',
+                                                                        hdr->zhours, hdr->zminutes);
+                                                                p += 5;
+                                                                len -= 5;
+                                                        }
+                                                        else
+                                                  /* not enough space left */
+                                                                break;
+                                                }
+                                                else {
+                                                        if (len >= 2) {
+                                                                *p++ = '%';
+                                                                *p++ = *cp;
+                                                                len -= 2;
+                                                        }
+                                                        else
+                                                  /* not enough space */
+                                                                break;
+                                                }
+                                                cp++;
+                                        }
+                                        else {
+                                                *p++ = *cp++;
+                                                len--;
+                                        }
+                                }
+                                *p = 0;
 
-	if (op == '[' || op == 'D')
-	  tm = localtime (&hdr->date_sent);
-	else if (op == '(')
-	  tm = localtime (&hdr->received);
-	else if (op == '<')
-	{
-	  T = time (NULL);
-	  tm = localtime (&T);
-	}
-	else
-	{
-	  /* restore sender's time zone */
-	  T = hdr->date_sent;
-	  if (hdr->zoccident)
-	    T -= (hdr->zhours * 3600 + hdr->zminutes * 60);
-	  else
-	    T += (hdr->zhours * 3600 + hdr->zminutes * 60);
-	  tm = gmtime (&T);
-	}
+                                if (do_locales && Locale)
+                                        setlocale (LC_TIME, Locale);
 
-	strftime (buf2, sizeof (buf2), dest, tm);
+                                if (op == '[' || op == 'D')
+                                        tm = localtime (&hdr->date_sent);
+                                else if (op == '(')
+                                        tm = localtime (&hdr->received);
+                                else if (op == '<') {
+                                        T = time (NULL);
+                                        tm = localtime (&T);
+                                }
+                                else {
+/* restore sender's time zone */
+                                        T = hdr->date_sent;
+                                        if (hdr->zoccident)
+                                                T -= (hdr->zhours * 3600 + hdr->zminutes * 60);
+                                        else
+                                                T += (hdr->zhours * 3600 + hdr->zminutes * 60);
+                                        tm = gmtime (&T);
+                                }
 
-	if (do_locales)
-	  setlocale (LC_TIME, "C");
+                                strftime (buf2, sizeof (buf2), dest, tm);
 
-	mutt_format_s (dest, destlen, prefix, buf2);
-	if (len > 0 && op != 'd' && op != 'D') /* Skip ending op */
-	  src = cp + 1;
-      }
-      break;
+                                if (do_locales)
+                                        setlocale (LC_TIME, "C");
 
-    case 'e':
-      snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-      snprintf (dest, destlen, fmt, mutt_messages_in_thread(ctx, hdr, 1));
-      break;
+                                mutt_format_s (dest, destlen, prefix, buf2);
+                                                  /* Skip ending op */
+                                if (len > 0 && op != 'd' && op != 'D')
+                                        src = cp + 1;
+                        }
+                        break;
 
-    case 'E':
-      if (!optional)
-      {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (dest, destlen, fmt, mutt_messages_in_thread(ctx, hdr, 0));
-      }
-      else if (mutt_messages_in_thread(ctx, hdr, 0) <= 1)
-	optional = 0;
-      break;
+                case 'e':
+                        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                        snprintf (dest, destlen, fmt, mutt_messages_in_thread(ctx, hdr, 1));
+                        break;
 
-    case 'f':
-      buf2[0] = 0;
-      rfc822_write_address (buf2, sizeof (buf2), hdr->env->from, 1);
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
+                case 'E':
+                        if (!optional) {
+                                snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                                snprintf (dest, destlen, fmt, mutt_messages_in_thread(ctx, hdr, 0));
+                        }
+                        else if (mutt_messages_in_thread(ctx, hdr, 0) <= 1)
+                                optional = 0;
+                        break;
 
-    case 'F':
-      if (!optional)
-      {
-        make_from (hdr->env, buf2, sizeof (buf2), 0);
-	mutt_format_s (dest, destlen, prefix, buf2);
-      }
-      else if (mutt_addr_is_user (hdr->env->from))
-        optional = 0;
-      break;
+                case 'f':
+                        buf2[0] = 0;
+                        rfc822_write_address (buf2, sizeof (buf2), hdr->env->from, 1);
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-    case 'H':
-      /* (Hormel) spam score */
-      if (optional)
-	optional = hdr->env->spam ? 1 : 0;
+                case 'F':
+                        if (!optional) {
+                                make_from (hdr->env, buf2, sizeof (buf2), 0);
+                                mutt_format_s (dest, destlen, prefix, buf2);
+                        }
+                        else if (mutt_addr_is_user (hdr->env->from))
+                                optional = 0;
+                        break;
 
-       if (hdr->env->spam)
-         mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->spam->data));
-       else
-         mutt_format_s (dest, destlen, prefix, "");
+                case 'H':
+/* (Hormel) spam score */
+                        if (optional)
+                                optional = hdr->env->spam ? 1 : 0;
 
-      break;
+                        if (hdr->env->spam)
+                                mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->spam->data));
+                        else
+                                mutt_format_s (dest, destlen, prefix, "");
 
-    case 'i':
-      mutt_format_s (dest, destlen, prefix, hdr->env->message_id ? hdr->env->message_id : "<no.id>");
-      break;
+                        break;
 
-    case 'l':
-      if (!optional)
-      {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (dest, destlen, fmt, (int) hdr->lines);
-      }
-      else if (hdr->lines <= 0)
-        optional = 0;
-      break;
+                case 'i':
+                        mutt_format_s (dest, destlen, prefix, hdr->env->message_id ? hdr->env->message_id : "<no.id>");
+                        break;
 
-    case 'L':
-      if (!optional)
-      {
-	make_from (hdr->env, buf2, sizeof (buf2), 1);
-	mutt_format_s (dest, destlen, prefix, buf2);
-      }
-      else if (!check_for_mailing_list (hdr->env->to, NULL, NULL, 0) &&
-	       !check_for_mailing_list (hdr->env->cc, NULL, NULL, 0))
-      {
-	optional = 0;
-      }
-      break;
+                case 'l':
+                        if (!optional) {
+                                snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                                snprintf (dest, destlen, fmt, (int) hdr->lines);
+                        }
+                        else if (hdr->lines <= 0)
+                                optional = 0;
+                        break;
 
-    case 'm':
-      if(ctx)
-      {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (dest, destlen, fmt, ctx->msgcount);
-      }
-      else
-	strfcpy(dest, "(null)", destlen);
-      break;
+                case 'L':
+                        if (!optional) {
+                                make_from (hdr->env, buf2, sizeof (buf2), 1);
+                                mutt_format_s (dest, destlen, prefix, buf2);
+                        }
+                        else if (!check_for_mailing_list (hdr->env->to, NULL, NULL, 0) &&
+                        !check_for_mailing_list (hdr->env->cc, NULL, NULL, 0)) {
+                                optional = 0;
+                        }
+                        break;
 
-    case 'n':
-      mutt_format_s (dest, destlen, prefix, mutt_get_name (hdr->env->from));
-      break;
+                case 'm':
+                        if(ctx) {
+                                snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                                snprintf (dest, destlen, fmt, ctx->msgcount);
+                        }
+                        else
+                                strfcpy(dest, "(null)", destlen);
+                        break;
 
-    case 'N':
-      if (!optional)
-      {
-	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-	snprintf (dest, destlen, fmt, hdr->score);
-      }
-      else
-      {
-	if (hdr->score == 0)
-	  optional = 0;
-      }
-      break;
+                case 'n':
+                        mutt_format_s (dest, destlen, prefix, mutt_get_name (hdr->env->from));
+                        break;
 
-    case 'O':
-      if (!optional)
-      {
-	make_from_addr (hdr->env, buf2, sizeof (buf2), 1);
-	if (!option (OPTSAVEADDRESS) && (p = strpbrk (buf2, "%@")))
-	  *p = 0;
-	mutt_format_s (dest, destlen, prefix, buf2);
-      }
-      else if (!check_for_mailing_list_addr (hdr->env->to, NULL, 0) &&
-	       !check_for_mailing_list_addr (hdr->env->cc, NULL, 0))
-      {
-	optional = 0;
-      }
-      break;
+                case 'N':
+                        if (!optional) {
+                                snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                                snprintf (dest, destlen, fmt, hdr->score);
+                        }
+                        else {
+                                if (hdr->score == 0)
+                                        optional = 0;
+                        }
+                        break;
 
-    case 'M':
-      snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-      if (!optional)
-      {
-	if (threads && is_index && hdr->collapsed && hdr->num_hidden > 1)
-	  snprintf (dest, destlen, fmt, hdr->num_hidden);
-	else if (is_index && threads)
-	  mutt_format_s (dest, destlen, prefix, " ");
-	else
-	  *dest = '\0';
-      }
-      else
-      {
-	if (!(threads && is_index && hdr->collapsed && hdr->num_hidden > 1))
-	  optional = 0;
-      }
-      break;
+                case 'O':
+                        if (!optional) {
+                                make_from_addr (hdr->env, buf2, sizeof (buf2), 1);
+                                if (!option (OPTSAVEADDRESS) && (p = strpbrk (buf2, "%@")))
+                                        *p = 0;
+                                mutt_format_s (dest, destlen, prefix, buf2);
+                        }
+                        else if (!check_for_mailing_list_addr (hdr->env->to, NULL, 0) &&
+                        !check_for_mailing_list_addr (hdr->env->cc, NULL, 0)) {
+                                optional = 0;
+                        }
+                        break;
 
-    case 'P':
-      strfcpy(dest, NONULL(hfi->pager_progress), destlen);
-      break;
+                case 'M':
+                        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                        if (!optional) {
+                                if (threads && is_index && hdr->collapsed && hdr->num_hidden > 1)
+                                        snprintf (dest, destlen, fmt, hdr->num_hidden);
+                                else if (is_index && threads)
+                                        mutt_format_s (dest, destlen, prefix, " ");
+                                else
+                                        *dest = '\0';
+                        }
+                        else {
+                                if (!(threads && is_index && hdr->collapsed && hdr->num_hidden > 1))
+                                        optional = 0;
+                        }
+                        break;
 
-    case 's':
-      
-      if (flags & M_FORMAT_TREE && !hdr->collapsed)
-      {
-	if (flags & M_FORMAT_FORCESUBJ)
-	{
-	  mutt_format_s (dest, destlen, "", NONULL (hdr->env->subject));
-	  snprintf (buf2, sizeof (buf2), "%s%s", hdr->tree, dest);
-	  mutt_format_s_tree (dest, destlen, prefix, buf2);
-	}
-	else
-	  mutt_format_s_tree (dest, destlen, prefix, hdr->tree);
-      }
-      else
-	mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->subject));
-      break;
+                case 'P':
+                        strfcpy(dest, NONULL(hfi->pager_progress), destlen);
+                        break;
 
-    case 'S':
-      if (hdr->deleted)
-	ch = 'D';
-      else if (hdr->attach_del)
-	ch = 'd';
-      else if (hdr->tagged)
-	ch = '*';
-      else if (hdr->flagged)
-	ch = '!';
-      else if (hdr->replied)
-	ch = 'r';
-      else if (hdr->read && (ctx && ctx->msgnotreadyet != hdr->msgno))
-	ch = '-';
-      else if (hdr->old)
-	ch = 'O';
-      else
-	ch = 'N';
+                case 's':
 
-      /* FOO - this is probably unsafe, but we are not likely to have such
-	 a short string passed into this routine */
-      *dest = ch;
-      *(dest + 1) = 0;
-      break;
+                        if (flags & M_FORMAT_TREE && !hdr->collapsed) {
+                                if (flags & M_FORMAT_FORCESUBJ) {
+                                        mutt_format_s (dest, destlen, "", NONULL (hdr->env->subject));
+                                        snprintf (buf2, sizeof (buf2), "%s%s", hdr->tree, dest);
+                                        mutt_format_s_tree (dest, destlen, prefix, buf2);
+                                }
+                                else
+                                        mutt_format_s_tree (dest, destlen, prefix, hdr->tree);
+                        }
+                        else
+                                mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->subject));
+                        break;
 
-    case 't':
-      buf2[0] = 0;
-      if (!check_for_mailing_list (hdr->env->to, "To ", buf2, sizeof (buf2)) &&
-	  !check_for_mailing_list (hdr->env->cc, "Cc ", buf2, sizeof (buf2)))
-      {
-	if (hdr->env->to)
-	  snprintf (buf2, sizeof (buf2), "To %s", mutt_get_name (hdr->env->to));
-	else if (hdr->env->cc)
-	  snprintf (buf2, sizeof (buf2), "Cc %s", mutt_get_name (hdr->env->cc));
-      }
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
+                case 'S':
+                        if (hdr->deleted)
+                                ch = 'D';
+                        else if (hdr->attach_del)
+                                ch = 'd';
+                        else if (hdr->tagged)
+                                ch = '*';
+                        else if (hdr->flagged)
+                                ch = '!';
+                        else if (hdr->replied)
+                                ch = 'r';
+                        else if (hdr->read && (ctx && ctx->msgnotreadyet != hdr->msgno))
+                                ch = '-';
+                        else if (hdr->old)
+                                ch = 'O';
+                        else
+                                ch = 'N';
 
-    case 'T':
-      snprintf (fmt, sizeof (fmt), "%%%sc", prefix);
-      snprintf (dest, destlen, fmt,
-		(Tochars && ((i = mutt_user_is_recipient (hdr))) < mutt_strlen (Tochars)) ? Tochars[i] : ' ');
-      break;
+/* FOO - this is probably unsafe, but we are not likely to have such
+   a short string passed into this routine */
+                        *dest = ch;
+                        *(dest + 1) = 0;
+                        break;
 
-    case 'u':
-      if (hdr->env->from && hdr->env->from->mailbox)
-      {
-	strfcpy (buf2, mutt_addr_for_display (hdr->env->from), sizeof (buf2));
-	if ((p = strpbrk (buf2, "%@")))
-	  *p = 0;
-      }
-      else
-	buf2[0] = 0;
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
+                case 't':
+                        buf2[0] = 0;
+                        if (!check_for_mailing_list (hdr->env->to, "To ", buf2, sizeof (buf2)) &&
+                        !check_for_mailing_list (hdr->env->cc, "Cc ", buf2, sizeof (buf2))) {
+                                if (hdr->env->to)
+                                        snprintf (buf2, sizeof (buf2), "To %s", mutt_get_name (hdr->env->to));
+                                else if (hdr->env->cc)
+                                        snprintf (buf2, sizeof (buf2), "Cc %s", mutt_get_name (hdr->env->cc));
+                        }
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-    case 'v':
-      if (mutt_addr_is_user (hdr->env->from)) 
-      {
-	if (hdr->env->to)
-	  mutt_format_s (buf2, sizeof (buf2), prefix, mutt_get_name (hdr->env->to));
-	else if (hdr->env->cc)
-	  mutt_format_s (buf2, sizeof (buf2), prefix, mutt_get_name (hdr->env->cc));
-	else
-	  *buf2 = 0;
-      }
-      else
-	mutt_format_s (buf2, sizeof (buf2), prefix, mutt_get_name (hdr->env->from));
-      if ((p = strpbrk (buf2, " %@")))
-	*p = 0;
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
+                case 'T':
+                        snprintf (fmt, sizeof (fmt), "%%%sc", prefix);
+                        snprintf (dest, destlen, fmt,
+                                (Tochars && ((i = mutt_user_is_recipient (hdr))) < mutt_strlen (Tochars)) ? Tochars[i] : ' ');
+                        break;
 
-    case 'Z':
-    
-      ch = ' ';
+                case 'u':
+                        if (hdr->env->from && hdr->env->from->mailbox) {
+                                strfcpy (buf2, mutt_addr_for_display (hdr->env->from), sizeof (buf2));
+                                if ((p = strpbrk (buf2, "%@")))
+                                        *p = 0;
+                        }
+                        else
+                                buf2[0] = 0;
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-      if (WithCrypto && hdr->security & GOODSIGN)
-        ch = 'S';
-      else if (WithCrypto && hdr->security & ENCRYPT)
-      	ch = 'P';
-      else if (WithCrypto && hdr->security & SIGN)
-        ch = 's';
-      else if ((WithCrypto & APPLICATION_PGP) && hdr->security & PGPKEY)
-        ch = 'K';
+                case 'v':
+                        if (mutt_addr_is_user (hdr->env->from)) {
+                                if (hdr->env->to)
+                                        mutt_format_s (buf2, sizeof (buf2), prefix, mutt_get_name (hdr->env->to));
+                                else if (hdr->env->cc)
+                                        mutt_format_s (buf2, sizeof (buf2), prefix, mutt_get_name (hdr->env->cc));
+                                else
+                                        *buf2 = 0;
+                        }
+                        else
+                                mutt_format_s (buf2, sizeof (buf2), prefix, mutt_get_name (hdr->env->from));
+                        if ((p = strpbrk (buf2, " %@")))
+                                *p = 0;
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-      snprintf (buf2, sizeof (buf2),
-		"%c%c%c", (THREAD_NEW ? 'n' : (THREAD_OLD ? 'o' : 
-		((hdr->read && (ctx && ctx->msgnotreadyet != hdr->msgno))
-		? (hdr->replied ? 'r' : ' ') : (hdr->old ? 'O' : 'N')))),
-		hdr->deleted ? 'D' : (hdr->attach_del ? 'd' : ch),
-		hdr->tagged ? '*' :
-		(hdr->flagged ? '!' :
-		 (Tochars && ((i = mutt_user_is_recipient (hdr)) < mutt_strlen (Tochars)) ? Tochars[i] : ' ')));
-      mutt_format_s (dest, destlen, prefix, buf2);
-      break;
+                case 'Z':
 
-    case 'X':
-      {
-	int count = mutt_count_body_parts (ctx, hdr);
+                        ch = ' ';
 
-	/* The recursion allows messages without depth to return 0. */
-	if (optional)
-          optional = count != 0;
+                        if (WithCrypto && hdr->security & GOODSIGN)
+                                ch = 'S';
+                        else if (WithCrypto && hdr->security & ENCRYPT)
+                                ch = 'P';
+                        else if (WithCrypto && hdr->security & SIGN)
+                                ch = 's';
+                        else if ((WithCrypto & APPLICATION_PGP) && hdr->security & PGPKEY)
+                                ch = 'K';
 
-        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-        snprintf (dest, destlen, fmt, count);
-      }
-      break;
+                        snprintf (buf2, sizeof (buf2),
+                                "%c%c%c", (THREAD_NEW ? 'n' : (THREAD_OLD ? 'o' :
+                        ((hdr->read && (ctx && ctx->msgnotreadyet != hdr->msgno))
+                                ? (hdr->replied ? 'r' : ' ') : (hdr->old ? 'O' : 'N')))),
+                                hdr->deleted ? 'D' : (hdr->attach_del ? 'd' : ch),
+                                hdr->tagged ? '*' :
+                        (hdr->flagged ? '!' :
+                        (Tochars && ((i = mutt_user_is_recipient (hdr)) < mutt_strlen (Tochars)) ? Tochars[i] : ' ')));
+                        mutt_format_s (dest, destlen, prefix, buf2);
+                        break;
 
-     case 'y':
-       if (optional)
-	 optional = hdr->env->x_label ? 1 : 0;
+                case 'X':
+                {
+                        int count = mutt_count_body_parts (ctx, hdr);
 
-       mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->x_label));
-       break;
- 
-    case 'Y':
-      if (hdr->env->x_label)
-      {
-	i = 1;	/* reduce reuse recycle */
-	htmp = NULL;
-	if (flags & M_FORMAT_TREE
-	    && (hdr->thread->prev && hdr->thread->prev->message
-		&& hdr->thread->prev->message->env->x_label))
-	  htmp = hdr->thread->prev->message;
-	else if (flags & M_FORMAT_TREE
-		 && (hdr->thread->parent && hdr->thread->parent->message
-		     && hdr->thread->parent->message->env->x_label))
-	  htmp = hdr->thread->parent->message;
-	if (htmp && mutt_strcasecmp (hdr->env->x_label,
-				     htmp->env->x_label) == 0)
-	  i = 0;
-      }
-      else
-	i = 0;
+/* The recursion allows messages without depth to return 0. */
+                        if (optional)
+                                optional = count != 0;
 
-      if (optional)
-	optional = i;
+                        snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+                        snprintf (dest, destlen, fmt, count);
+                }
+                break;
 
-      if (i)
-        mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->x_label));
-      else
-        mutt_format_s (dest, destlen, prefix, "");
+                case 'y':
+                        if (optional)
+                                optional = hdr->env->x_label ? 1 : 0;
 
-      break;
+                        mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->x_label));
+                        break;
 
-    default:
-      snprintf (dest, destlen, "%%%s%c", prefix, op);
-      break;
-  }
+                case 'Y':
+                        if (hdr->env->x_label) {
+                                i = 1;            /* reduce reuse recycle */
+                                htmp = NULL;
+                                if (flags & M_FORMAT_TREE
+                                        && (hdr->thread->prev && hdr->thread->prev->message
+                                        && hdr->thread->prev->message->env->x_label))
+                                        htmp = hdr->thread->prev->message;
+                                else if (flags & M_FORMAT_TREE
+                                        && (hdr->thread->parent && hdr->thread->parent->message
+                                        && hdr->thread->parent->message->env->x_label))
+                                        htmp = hdr->thread->parent->message;
+                                if (htmp && mutt_strcasecmp (hdr->env->x_label,
+                                        htmp->env->x_label) == 0)
+                                        i = 0;
+                        }
+                        else
+                                i = 0;
 
-  if (optional)
-    mutt_FormatString (dest, destlen, col, ifstring, hdr_format_str, (unsigned long) hfi, flags);
-  else if (flags & M_FORMAT_OPTIONAL)
-    mutt_FormatString (dest, destlen, col, elsestring, hdr_format_str, (unsigned long) hfi, flags);
+                        if (optional)
+                                optional = i;
 
-  return (src);
+                        if (i)
+                                mutt_format_s (dest, destlen, prefix, NONULL (hdr->env->x_label));
+                        else
+                                mutt_format_s (dest, destlen, prefix, "");
+
+                        break;
+
+                default:
+                        snprintf (dest, destlen, "%%%s%c", prefix, op);
+                        break;
+        }
+
+        if (optional)
+                mutt_FormatString (dest, destlen, col, ifstring, hdr_format_str, (unsigned long) hfi, flags);
+        else if (flags & M_FORMAT_OPTIONAL)
+                mutt_FormatString (dest, destlen, col, elsestring, hdr_format_str, (unsigned long) hfi, flags);
+
+        return (src);
 #undef THREAD_NEW
 #undef THREAD_OLD
 }
 
+
 void
 _mutt_make_string (char *dest, size_t destlen, const char *s, CONTEXT *ctx, HEADER *hdr, format_flag flags)
 {
-  struct hdr_format_info hfi;
+        struct hdr_format_info hfi;
 
-  hfi.hdr = hdr;
-  hfi.ctx = ctx;
-  hfi.pager_progress = 0;
+        hfi.hdr = hdr;
+        hfi.ctx = ctx;
+        hfi.pager_progress = 0;
 
-  mutt_FormatString (dest, destlen, 0, s, hdr_format_str, (unsigned long) &hfi, flags);
+        mutt_FormatString (dest, destlen, 0, s, hdr_format_str, (unsigned long) &hfi, flags);
 }
+
 
 void
 mutt_make_string_info (char *dst, size_t dstlen, const char *s, struct hdr_format_info *hfi, format_flag flags)
 {
-  mutt_FormatString (dst, dstlen, 0, s, hdr_format_str, (unsigned long) hfi, flags);
+        mutt_FormatString (dst, dstlen, 0, s, hdr_format_str, (unsigned long) hfi, flags);
 }

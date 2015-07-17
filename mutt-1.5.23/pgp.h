@@ -7,12 +7,12 @@
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation; either version 2 of the License, or
  *     (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
- * 
+ *
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -22,7 +22,6 @@
 
 #include "mutt_crypt.h"
 #include "pgplib.h"
-
 
 /* prototypes */
 
@@ -35,7 +34,6 @@ const char *pgp_micalg (const char *fname);
 
 char *_pgp_keyid (pgp_key_t);
 char *pgp_keyid (pgp_key_t);
-
 
 int mutt_check_pgp (HEADER * h);
 
@@ -58,41 +56,38 @@ void pgp_extract_keys_from_attachment_list (FILE * fp, int tag, BODY * top);
 void pgp_void_passphrase (void);
 int pgp_valid_passphrase (void);
 
-
 /* The PGP invocation interface - not really beautiful. */
 
 pid_t pgp_invoke_decode (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd, 
-			 const char *fname, short need_passphrase);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *fname, short need_passphrase);
 pid_t pgp_invoke_verify (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd, 
-			 const char *fname, const char *sig_fname);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *fname, const char *sig_fname);
 pid_t pgp_invoke_decrypt (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd, 
-			  const char *fname);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *fname);
 pid_t pgp_invoke_sign (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-		       int pgpinfd, int pgpoutfd, int pgperrfd, 
-		       const char *fname);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *fname);
 pid_t pgp_invoke_encrypt (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd,
-			  const char *fname, const char *uids, int sign);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *fname, const char *uids, int sign);
 pid_t pgp_invoke_export (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd, 
-			 const char *uids);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *uids);
 pid_t pgp_invoke_verify_key (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			     int pgpinfd, int pgpoutfd, int pgperrfd, 
-			     const char *uids);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *uids);
 pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			    int pgpinfd, int pgpoutfd, int pgperrfd, 
-			    pgp_ring_t keyring, LIST *hints);
+int pgpinfd, int pgpoutfd, int pgperrfd,
+pgp_ring_t keyring, LIST *hints);
 pid_t pgp_invoke_traditional (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd,
-			  const char *fname, const char *uids, int flags);
-
+int pgpinfd, int pgpoutfd, int pgperrfd,
+const char *fname, const char *uids, int flags);
 
 void pgp_invoke_import (const char *fname);
 void pgp_invoke_getkeys (ADDRESS *);
-
 
 /* private ? */
 int pgp_verify_one (BODY *, STATE *, const char *);
@@ -101,5 +96,4 @@ BODY *pgp_encrypt_message (BODY *, char *, int);
 BODY *pgp_sign_message (BODY *);
 
 int pgp_send_menu (HEADER *msg, int *redraw);
-
-#endif /* CRYPT_BACKEND_CLASSIC_PGP */
+#endif                                            /* CRYPT_BACKEND_CLASSIC_PGP */
