@@ -3,7 +3,7 @@ Hacked version of mutt. Following hacks are done.
 
 1)	Sidebar jump-to mailbox
 
-	sidebar is great, but people have too many mailboxes and going next-prev
+	Sidebar is great, but people have too many mailboxes and going next-prev
 	is too slow. This hack adds a key-binding to jump to a configured set of 
 	mailboxes. e.g. configuration
 
@@ -17,4 +17,11 @@ Hacked version of mutt. Following hacks are done.
 	  and sets & as a shortcut to mailbox2, where mailbox2 is "INBOX"
 	  sidebar_jump_mailbox3, sidebar-jump-key3 are allowed.
 	  At-most 3 jump-keys and mailbox names can be given.
+
+2)	Sidebar color indicator
+
+	By default, sidebar indicator is same color as the indicator in scroll window.
+	Minor hack to add a sidebar_indicator color key, to have a separate color
+	for the currently active mailbox shown in sidebar.
+
 
