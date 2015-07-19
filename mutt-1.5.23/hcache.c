@@ -926,8 +926,11 @@ static int
 hcache_open_tc (struct header_cache* h, const char* path)
 {
         h->db = tcbdbnew();
-        if (option(OPTHCACHECOMPRESS))
+        if (option(OPTHCACHECOMPRESS)) {
                 tcbdbtune(h->db, 0, 0, 0, -1, -1, BDBTDEFLATE);
+				info_print("compress tcbdb\n");
+		}
+		info_print("opening tcbdb %s\n", path);
         if (tcbdbopen(h->db, path, BDBOWRITER | BDBOCREAT))
                 return 0;
         else {

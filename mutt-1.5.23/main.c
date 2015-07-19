@@ -547,6 +547,11 @@ static void start_curses (void)
         init_extended_keys();
 }
 
+FILE *info_fd;
+void info_fd_init() {
+	info_fd = fopen("/tmp/mutt_info.log", "a");
+	info_print("--- opened muttlog ---\n");
+}
 
 #define M_IGNORE  (1<<0)                          /* -z */
 #define M_BUFFY   (1<<1)                          /* -Z */
@@ -584,6 +589,7 @@ int main (int argc, char **argv)
                 exit(1);
         }
 
+		info_fd_init();
 #ifdef ENABLE_NLS
 /* FIXME what about init.c:1439 ? */
         setlocale (LC_ALL, "");

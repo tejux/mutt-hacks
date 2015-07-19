@@ -972,4 +972,14 @@ typedef struct
 #include "protos.h"
 #include "lib.h"
 #include "globals.h"
+
+extern FILE *info_fd;	/* global fd to dump debug logs to get code
+						   coverage info */
+#define info_print(args...) do { \
+	if(info_fd != NULL) { \
+		fprintf(info_fd, args); \
+		fflush(info_fd); \
+	} \
+} while(0)
+
 #endif                                            /*MUTT_H*/

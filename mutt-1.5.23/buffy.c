@@ -432,7 +432,6 @@ void buffy_maildir_update (BUFFY* mailbox)
                         }
                 }
         }
-
         closedir (dirp);
 }
 
